@@ -1,0 +1,949 @@
+<HTML><HEAD><TITLE></TITLE>
+<STYLE>
+.uchuu
+{
+ position:absolute;
+ overflow:hidden;
+}
+.dan1
+{
+ position:absolute;
+ left:-100; top:480;
+}
+.enemy
+{
+ position:absolute;
+}
+.eb
+{
+ position:absolute;
+}
+.ene2
+{
+ position:absolute;
+ background:#f0f0f0;
+ left:300;
+ top:-100;
+ height:50;
+ width:50;
+}
+.dan2
+{
+ position:absolute;
+ left:-100;
+ top:;80;
+}
+.eneb1
+{position:absolute;}
+.eneb2
+{position:absolute;}
+.eneb3
+{position:absolute;}
+.eneb4
+{position:absolute;}
+.eneb5
+{position:absolute;}
+.eneb6
+{position:absolute;}
+.eneb7
+{position:absolute;}
+.eneb8
+{position:absolute;}
+.eneb9
+{position:absolute;}
+.eneb10
+{position:absolute;}
+.player
+{
+ position:absolute;
+ left:160;
+ top:480;
+}
+.shuryo
+{
+  left:180;
+  top:180;
+  position:absolute;
+  color:#ffffff;
+}
+.clear
+{
+   left:180;
+   top:180;
+   position:absolute;
+   color:#ffffff;
+}
+.jikihp
+{
+  left:10;
+  top:10;
+  position:absolute;
+  color:#ffffff;
+}
+.settei
+{
+  left:700;
+  top:40;
+  position:absolute;
+  color:#000000;
+}
+.teki2
+{
+ position:absolute;
+ left:300;
+ top:-100;
+}
+.ishi
+{
+ position:absolute;
+}
+</STYLE>
+<SCRIPT type="text/javascript">
+var ene = document.getElementsByClassName("enemy");
+var jiki = document.getElementsByClassName("player");
+var tama = document.getElementsByClassName("dan1");
+var eneb = document.getElementsByClassName("eb");
+var eb1=document.getElementsByClassName("eneb1");
+var eb2=document.getElementsByClassName("eneb2");
+var eb3=document.getElementsByClassName("eneb3");
+var eb4=document.getElementsByClassName("eneb4");
+var eb5=document.getElementsByClassName("eneb5");
+var eb6=document.getElementsByClassName("eneb6");
+var eb7=document.getElementsByClassName("eneb7");
+var eb8=document.getElementsByClassName("eneb8");
+var eb9=document.getElementsByClassName("eneb9");
+var eb10=document.getElementsByClassName("eneb10");
+var ene2=document.getElementsByClassName("teki2");
+var e2b=document.getElementsByClassName("dan2");
+var ishi=document.getElementsByClassName("ishi");
+var xid,flag1=0,e1,em1,lg=0,han,flag3=0,fg4=0;
+var e1kil=0;
+var ldk;
+var eshoki=new Array();
+var sn = new Array();
+var ebt = new Array();
+var mx = new Array();
+var my = new Array();
+var el = new Array();
+var flag2 = new Array();
+var ka = new Array();
+var eb_shokix = new Array();
+var eb_shokiy = new Array();
+var e1_hp = new Array();
+var inl = new Array();
+var e2_hp=10;
+var jiki_hp=5;
+function init()
+{  
+   var i;
+   loopy();
+   var enx=20,eny=20;
+   for(i=0;i<=9;i++)//ìGÇè\Ç±èëÇ≠ÅAÇ®ÇÊÇ—ìGÇÃíeÇÃîzíuÇçsÇ§
+  {
+           ene[i].style.left=enx;
+           ene[i].style.top=eny;
+           ene[i].style.background="#f000f0";
+           eneb[i].style.top=parseInt(window.getComputedStyle(ene[i],null).getPropertyValue("top"));
+           eneb[i].style.left=-100;
+           eny=eny+parseInt(window.getComputedStyle(ene[i],null).getPropertyValue("height"))+10;
+           var enex=rdm(320);
+           ene[i].style.left=enex;
+  }
+  for(i=0;i<ene.length;i++)
+  {
+   eshoki[i]=parseInt(window.getComputedStyle(ene[i],null).getPropertyValue("left"));
+  }
+  var m;
+  for (m=0;m<ene.length;m++)
+  {
+   sn[m]=5;                                       //snÇÕÅAìGÇªÇÍÇºÇÍÇÃÇòç¿ïWÇÃìÆÇ´ÇÃïœâªó ÇíËÇﬂÇÈÅB
+   ebt[m]=rdm(270)+50;                            //ebt[]Ç≈ÅAÇ«Ç±Ç…ìGÇÃÇòç¿ïWÇ™óàÇΩÇÁéÀèoÇçsÇ§ÇÃÇ©ÇÉâÉìÉ_ÉÄÇ≈íËÇﬂÇÈÅB"Ç«Ç±"Ç™ebtÅB
+   flag2[m]=0;                                    //ìGÇÃíeÇ™ÉGÉäÉAÇ©ÇÁèoÇÈÇ©èoÇ»Ç¢Ç©ÅAÇéwÇ∑flag2îzóÒÅBìYÇ¶éöÇÕäeÅXÇÃíeÇéwÇ∑ÅB
+   e1_hp[m]=5;
+  }
+  xid=setInterval("enemove1()",100);
+  var z;
+  document.onkeydown=function(){ Keydown(event.key);}
+}
+var q;
+function loopy()
+{
+ var lm=0;
+ for(q=0;q<=4;q++)
+ {
+  ishi[q].style.left=rdm(80)+lm;
+  ishi[q].style.top=-rdm(400);
+  lm=lm+80;
+  inl[q]=setInterval("inloop("+q+")",100);
+ }
+}
+var xflag=0;
+function inloop(q)
+{
+ var jki=parseInt(window.getComputedStyle(ishi[q],null).getPropertyValue("top"));
+ ishi[q].style.top=jki+3;
+ var ho=hit(jiki[0],ishi[q]);
+ if(ho==1)
+ {
+  jiki_hp=jiki_hp-1;
+  terao();
+ }
+ if(jki>600)
+ {
+  clearInterval(inl[q]);
+  ishi[q].style.top=-100;
+  xflag++;
+  if(xflag==5)
+  {
+   loopy();
+   xflag=0;
+  }
+ }
+}
+function enemove1()
+{
+ var b;
+ for(b=0;b<=9;b++)
+ {
+     ene[b].style.left=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("left"))+sn[b];
+     var m=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("left"));
+     if(m>365)
+     {
+      sn[b]=sn[b]*(-1);
+     }
+     if(m<6)
+     {
+       sn[b]=sn[b]*(-1);
+     }
+      if(m>=ebt[b] && m<ebt[b]+5)                //ìGÇ™íeÇóéÇ∆Ç∑èÍèäÇ…ÅAìGÇ™óàÇƒÇ¢ÇÈÇ©óàÇƒÇ¢Ç»Ç¢Ç©
+     {
+         if(flag2[b]==0)                        //ìGÇ™íeÇóéÇ∆Ç∑èÍèäÇ…óàÇƒÇ¢ÇÈÅ@Ç©Ç¬ìGÇÃíeÇ™ÉGÉäÉAÇ©ÇÁèoÇƒÇ¢Ç»Ç¢(î≠éÀÇÃèåèÇ™êÆÇ¡ÇƒÇ¢ÇÈÅj
+        {
+           eneb[b].style.left=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("left"))+20;
+           eneb[b].style.top=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("top"));
+           flag2[b]=1;
+           em1=rdm(3);
+           if(em1==0)
+           {el[b]=setInterval("eb_loop("+b+")",100);}
+           if(em1==1)
+           {el[b]=setInterval("eb_loop2("+b+")",100);}
+           if(em1==2)
+           {el[b]=setInterval("eb_loop3("+b+")",100);}
+        }
+     }
+ }
+}
+function eb_loop(b)                            //ìGÇÃíeÇ™yï˚å¸ÇÃÇ›Ç…ìÆÇ≠èÍçá
+{
+  mx[b] = parseInt(window.getComputedStyle(eneb[b],null).getPropertyValue("left"));
+  my[b] = parseInt(window.getComputedStyle(eneb[b],null).getPropertyValue("top"));
+  var ma=5;
+  eneb[b].style.top=my[b]+ma;
+  if(my[b]>600)
+  {
+   eneb[b].style.left=-100;
+   eneb[b].style.top=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("top"));
+   clearInterval(el[b]);
+   flag2[b]=0;
+  }
+  var ho=hit(jiki[0],eneb[b]);
+  var hj=hit(jiki[1],eneb[b]);
+  if(ho==1 || hj==1)                            //é©ã@Ç∆ìGÇÃíeÇ™ìñÇΩÇ¡ÇΩÇÁ
+  {
+     clearInterval(el[b]);
+     eneb[b].style.left=-100;
+     eneb[b].style.top=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("top"));
+     terao();
+  }
+}
+function eb_loop2(b)                           //ìGÇÃíeÇ™âEéŒÇﬂâ∫Ç…ìÆÇ≠èÍçá
+{
+  mx[b] = parseInt(window.getComputedStyle(eneb[b],null).getPropertyValue("left"));
+  my[b] = parseInt(window.getComputedStyle(eneb[b],null).getPropertyValue("top"));
+  var ma=5,mb=3;
+  eneb[b].style.left=mx[b]+mb;
+  eneb[b].style.top=my[b]+ma;
+  if(mx[b]>400 || my[b]>600)
+  {
+   eneb[b].style.left=-100;
+   eneb[b].style.top=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("top"));
+   clearInterval(el[b]);
+   flag2[b]=0;
+  }
+  var ho=hit(jiki[0],eneb[b]);
+  var hj=hit(jiki[1],eneb[b]);
+  if(ho==1 || hj==1)                            //é©ã@Ç∆ìGÇÃíeÇ™ìñÇΩÇ¡ÇΩÇÁ
+  {
+     clearInterval(el[b]);
+     eneb[b].style.left=-100;
+     eneb[b].style.top=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("top"));
+     terao();
+  }
+}
+function eb_loop3(b)                          //ìGÇÃíeÇ™ç∂éŒÇﬂâ∫Ç…ìÆÇ≠èÍçá
+{
+  mx[b] = parseInt(window.getComputedStyle(eneb[b],null).getPropertyValue("left"));
+  my[b] = parseInt(window.getComputedStyle(eneb[b],null).getPropertyValue("top"));
+  var ma=5,mb=-3;
+  eneb[b].style.left=mx[b]+mb;
+  eneb[b].style.top=my[b]+ma;
+  if(mx[b]<0 || my[b]>600)
+  {
+   eneb[b].style.left=-100;
+   eneb[b].style.top=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("top"));
+   clearInterval(el[b]);
+   flag2[b]=0;
+  }
+  var ho=hit(jiki[0],eneb[b]);
+  var hj=hit(jiki[1],eneb[b]);
+  if(ho==1 || hj==1)                         //é©ã@Ç∆ìGÇÃíeÇ™ìñÇΩÇ¡ÇΩÇÁÅB
+  {
+     clearInterval(el[b]);
+     eneb[b].style.left=-100;
+     eneb[b].style.top=parseInt(window.getComputedStyle(ene[b],null).getPropertyValue("top"));
+     terao();
+  }
+}
+function Keydown(key)
+{
+ if(key=="ArrowRight"){keyD(5,0);}
+ if(key=="ArrowLeft"){keyD(-5,0);}
+ if(key=="ArrowUp"){keyD(0,-5);}
+ if(key=="ArrowDown"){keyD(0,5);}
+ if(key=="a")
+ {
+  if(lg==0)                             //lgÇ™0Ç≈aÇ™âüÇ≥ÇÍÇÈéûÅAíeÇëïìUÅ®éÀèo
+   {
+    tama[0].style.left=parseInt(window.getComputedStyle(jiki[1],null).getPropertyValue("left"))+13;
+    tama[0].style.top=parseInt(window.getComputedStyle(jiki[1],null).getPropertyValue("top"));
+    xid=setInterval("tama_loop()",10);
+    lg=1;
+   }
+ }
+}
+function keyD(mvx,mvy) //ÉLÅ[É{Å[ÉhÇ…ÇÊÇÈî≠éÀë‰ÇÃà⁄ìÆ
+{
+    var xx1,yy1,xx2,yy2,qe;
+    yy1=parseInt(window.getComputedStyle(jiki[0],null).getPropertyValue("top"));
+    xx1=parseInt(window.getComputedStyle(jiki[0],null).getPropertyValue("left"));
+    yy2=parseInt(window.getComputedStyle(jiki[1],null).getPropertyValue("top"));
+    xx2=parseInt(window.getComputedStyle(jiki[1],null).getPropertyValue("left"));
+    jiki[0].style.top=yy1+mvy;
+    jiki[0].style.left=xx1+mvx;
+    jiki[1].style.top=yy2+mvy;
+    jiki[1].style.left=xx2+mvx;
+    for(qe=0;qe<=9;qe++)
+     {
+      var ho=hit(jiki[0],ene[qe]);
+      var hj=hit(jiki[1],ene[qe]);
+      if(ho==1 || hj==1)
+      {
+       jiki_hp=jiki_hp-1;
+       if(jiki_hp==0)
+        {
+         jiki[0].style.visibility="hidden";
+         jiki[0].style.left=-100;
+         jiki[0].style.top=0;
+         jiki[0].style.width=0;
+         jiki[0].style.height=0;
+         jiki[1].style.visibility="hidden";
+         jiki[1].style.left=-100;
+         jiki[1].style.top=0;
+         jiki[1].style.width=0;
+         jiki[1].style.height=0;
+         tama[0].style.left=-100;
+         tama[0].style.top=parseInt(window.getComputedStyle(jiki[0],null).getPropertyValue("top"));
+         owari.innerHTML="GAMEOVER";
+         }
+      }
+     }
+    return;
+}
+function tama_loop()                     //é©ã@ÇÃíeÇÃéÀèo
+{
+    console.log(e2_hp);
+    var yv;
+    yv=parseInt(window.getComputedStyle(tama[0],null).getPropertyValue("top"));
+    tama[0].style.top=yv-10;
+    if(yv<0)
+    {
+     yv=parseInt(window.getComputedStyle(jiki[0],null).getPropertyValue("top"));
+     lg=0;                               //lgÇÇOÇ…ÇµÇƒÅAâÊñ äXÇ…è¡Ç¶ÇΩíeÇ™ëïìUÇ≈Ç´ÇÈèÛë‘Ç…Ç∑ÇÈÅB
+     replay();
+    }
+    var ta;
+    var i=0;
+    var ji;
+    ji=hit(tama[0],ene2[0])             //ìGÇQÇ…ìñÇΩÇ¡ÇΩÇÁ
+    if(flag3==1 && ji==1)
+    {
+      e2_hp=e2_hp-1;
+      lg=0;
+      replay();
+      if(e2_hp==0)
+      {
+         ene2[i].style.left=-100;
+          for(v=0;v<=23;v++)
+          {
+           clearInterval(ka[v]);
+          }    
+        clearInterval(ldk);
+        for(lg=0;lg<=4;lg++)
+        {
+            clearInterval(inl[lg]);
+        }
+        kuria.innerHTML="GAMECLEAR";
+      }
+    }
+    for(i=0;i<ene.length;i++)
+    {
+      ta=hit(tama[0],ene[i]);         
+           if(ta==1)
+          {
+            clearInterval(xid);
+            e1_hp[i]=e1_hp[i]-1;
+            lg=0;
+            if(e1_hp[i]==0)
+            {
+              ene[i].style.visibility="hidden";
+              ene[i].style.left=-100;
+              ene[i].style.top=0;
+              ene[i].style.width=0;
+              ene[i].style.height=0;
+              sn[i]=0;
+              e1kil++;
+              console.log(e1kil);
+              if(e1kil==10){ldk=setInterval("e2_loop()",100);}
+             }
+           tama[0].style.left=-100;
+           tama[0].style.top=parseInt(window.getComputedStyle(jiki[0],null).getPropertyValue("top"));
+        }
+    }
+}
+var zux=-5,zuy=5;
+var tom,tomy;
+var flag8=0;
+var v;
+function e2_loop()                                             //ìGÇQÇåàÇﬂÇÁÇÍÇΩèÍèäÇ‹Ç≈ìÆÇ©Ç∑ä÷êî
+{
+ var e2x=parseInt(window.getComputedStyle(ene2[0],null).getPropertyValue("left"));
+ var e2y=parseInt(window.getComputedStyle(ene2[0],null).getPropertyValue("top"));
+ ene2[0].style.left=e2x+zux;
+ ene2[0].style.top=e2y+zuy;
+ tom=parseInt(window.getComputedStyle(ene2[0],null).getPropertyValue("left"));
+ tomy=parseInt(window.getComputedStyle(ene2[0],null).getPropertyValue("top"));
+    if(tom>=45 && tom<50 && flag8==0)                                      //xèåèÇ≈ÅAìGÇQÇÃïœâªÇ™ïœÇÌÇÈ
+    {
+     loopx();                                                  //ìGÇQÇÃíeÇÃî≠éÀ
+     flag3=1;                                                  //ìGÇQÇ÷ÇÃìñÇΩÇËîªíËÇÇ¬ÇØÇÈ
+     zux=8;
+     zuy=-3;
+     flag8=1;
+    }
+    if(tomy<=85 && tomy>80 && flag8==1)
+    {
+     zuy=zuy*(-1);
+    }
+    if(flag8==1)
+    {
+       if(tom>=350 || tom<0  && flag8==1)
+       {
+         zux=zux*(-1);
+       }
+       if(tomy>=180 || tomy<=0  && flag8==1)
+       {
+        zuy=zuy*(-1);
+       }
+    }
+}
+function loopx()
+{
+   var a;
+   for(a=0;a<=23;a++)                                //24Ç¬ÇÃíeÇ∑Ç◊ÇƒÇìG2ÇÃç¿ïWÇ…çáÇÌÇπÇÈÅB
+   {
+    e2b[a].style.left=parseInt(window.getComputedStyle(ene2[0],null).getPropertyValue("left"))+10;
+    e2b[a].style.top=parseInt(window.getComputedStyle(ene2[0],null).getPropertyValue("top"))+10;
+    ka[a]=setInterval("e2b_loop("+a+")",50);       //ìG2ÇÃíeÇÃéÀèoÉãÅ[ÉvÇçsÇ§ÅB
+   }
+}
+function e2b_loop(a)                                 //ìGÇQÇÃíeäeÅXÇìÆÇ©Ç∑ä÷êî
+{
+  han=5;                                             //îºåaÇíËÇﬂÇÈÅB
+  eb_shokix[a]=parseInt(window.getComputedStyle(e2b[a],null).getPropertyValue("left"));
+  eb_shokiy[a]=parseInt(window.getComputedStyle(e2b[a],null).getPropertyValue("top"));
+  var us,sl;
+  var xhen1=5/2;
+  var xhen2=5*Math.sqrt(3)/2;
+  var yhen1=5/2;
+  var yhen2=5*Math.sqrt(3)/2;
+  var xhei1=(10+5*Math.sqrt(3))/Math.sqrt(4*Math.sqrt(3)+8);
+  var xhei2=5/Math.sqrt(4*Math.sqrt(3)+8);
+  var yhei1=xhei2;
+  var yhei2=xhei1;
+  if(a==0)
+  {
+    e2b[a].style.top=eb_shokiy[a]-han;
+    us = hit(e2b[a],jiki[0]);                        //ìGÇÃíeÇ∆é©ã@Ç∆ÇÃìñÇΩÇËîªíËÅiÇQçsÅj
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();                                       //é©ã@Ç™è¡Ç¶ÇÈteraoä÷êîÇåƒÇ—èoÇ∑ÅB
+    }
+  }
+  else if(a==1)
+  {
+    e2b[a].style.top=eb_shokiy[a]+han;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==2)
+  {
+    e2b[a].style.left=eb_shokix[a]+5/Math.sqrt(2);
+    e2b[a].style.top=eb_shokiy[a]-5/Math.sqrt(2);
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+      eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==3)
+  {
+    e2b[a].style.left=eb_shokix[a]-5/Math.sqrt(2);
+    e2b[a].style.top=eb_shokiy[a]+5/Math.sqrt(2);
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+     eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==4)
+  {
+    e2b[a].style.left=eb_shokix[a]-5/Math.sqrt(2);
+    e2b[a].style.top=eb_shokiy[a]-5/Math.sqrt(2);
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==5)
+  {
+    e2b[a].style.left=eb_shokix[a]+5/Math.sqrt(2);
+    e2b[a].style.top=eb_shokiy[a]+5/Math.sqrt(2);
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==6)
+  {
+    e2b[a].style.left=eb_shokix[a]-han;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==7)
+  {
+    e2b[a].style.left=eb_shokix[a]+han;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+    clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==8)
+  {
+    e2b[a].style.left=eb_shokix[a]+xhen2;
+    e2b[a].style.top=eb_shokiy[a]+yhen1;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==9)
+  {
+    e2b[a].style.left=eb_shokix[a]+xhen2;
+    e2b[a].style.top=eb_shokiy[a]-yhen1;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==10)
+  {
+    e2b[a].style.left=eb_shokix[a]+xhen1;
+    e2b[a].style.top=eb_shokiy[a]-yhen2;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==11)
+  {
+    e2b[a].style.left=eb_shokix[a]-xhen1;
+    e2b[a].style.top=eb_shokiy[a]-yhen2;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==12)
+  {
+    e2b[a].style.left=eb_shokix[a]-xhen2;
+    e2b[a].style.top=eb_shokiy[a]-yhen1;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==13)
+  {
+    e2b[a].style.left=eb_shokix[a]-xhen2;
+    e2b[a].style.top=eb_shokiy[a]+yhen1;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==14)
+  {
+    e2b[a].style.left=eb_shokix[a]-xhen1;
+    e2b[a].style.top=eb_shokiy[a]+yhen2;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==15)
+  {
+    e2b[a].style.left=eb_shokix[a]+xhen1;
+    e2b[a].style.top=eb_shokiy[a]+yhen2;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==16)                   //75ìx,15
+  {
+    e2b[a].style.left=eb_shokix[a]+xhei1;
+    e2b[a].style.top=eb_shokiy[a]+yhei1;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==17)
+  {
+    e2b[a].style.left=eb_shokix[a]+xhei1;
+    e2b[a].style.top=eb_shokiy[a]-yhei1;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+     clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==18)
+  {
+    e2b[a].style.left=eb_shokix[a]+xhei2;
+    e2b[a].style.top=eb_shokiy[a]-yhei2;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+       clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==19 )
+  {
+    e2b[a].style.left=eb_shokix[a]-xhei2;
+    e2b[a].style.top=eb_shokiy[a]-yhei2;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+      clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==20 )
+  {
+    e2b[a].style.left=eb_shokix[a]-xhei1;
+    e2b[a].style.top=eb_shokiy[a]-yhei1;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+      clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==21)
+  {
+    e2b[a].style.left=eb_shokix[a]-xhei1;
+    e2b[a].style.top=eb_shokiy[a]+yhei1;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+      clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==22)
+  {
+    e2b[a].style.left=eb_shokix[a]-xhei2;
+    e2b[a].style.top=eb_shokiy[a]+yhei2;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+    eb_shokix[a]=-100;
+      clearInterval(ka[a]);
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  else if(a==23)
+  {
+    e2b[a].style.left=eb_shokix[a]+xhei2;
+    e2b[a].style.top=eb_shokiy[a]+yhei2;
+    us = hit(e2b[a],jiki[0]);
+    sl = hit(e2b[a],jiki[1]);
+    if(us==1 || sl==1)
+    {
+      clearInterval(ka[a]);
+      eb_shokix[a]=-100;
+      e2b[a].style.left=-100;
+      terao();
+    }
+  }
+  if(eb_shokix[a]<-30 || eb_shokix[a]>400 || eb_shokiy[a]<-30 || eb_shokiy[a]>600)
+  {
+      clearInterval(ka[a]);
+      if(a==23)
+      {e2bf=0;}
+      e2b[a].style.left=-100;
+      fg4++;
+      if(fg4==24)
+      {
+          loopx();
+          fg4=0;
+      }
+  }
+}
+function terao()
+{
+         jiki_hp=jiki_hp-1;
+         console.log(jiki_hp);
+         ji.innerHTML="écã@:"+jiki_hp;
+         if(jiki_hp<=0)
+         {
+          jiki_hp=0;
+          ji.innerHTML="écã@"+jiki_hp;
+          jiki[0].style.visibility="hidden";
+          jiki[0].style.left=-100;
+          jiki[0].style.top=0;
+          jiki[0].style.width=0;
+          jiki[0].style.height=0;
+          jiki[1].style.visibility="hidden";
+          jiki[1].style.left=-100;
+          jiki[1].style.top=0;
+          jiki[1].style.width=0;
+          jiki[1].style.height=0;
+          tama[0].style.left=-100;
+          owari.innerHTML="GAMEOVER";
+         }
+}
+function rdm(n)
+{
+	return Math.floor(Math.random()*n);
+}
+function replay()
+{
+ clearInterval(xid);
+ tama[0].style.left=-100;
+ tama[0].style.top=parseInt(window.getComputedStyle(jiki[0],null).getPropertyValue("top"));
+ return;
+}
+function hit(obj1,obj2)//0:èdÇ»ÇËñ≥ÇµÅC1:xï˚å¸Ç©ÇÁÅC2:yï˚å¸Ç©ÇÁ
+{
+    var i,xv1,yv1,xv2,xy2,w1,h1,w2,h2,xlen,ylen;
+    xv1=parseInt(window.getComputedStyle(obj1,null).getPropertyValue("left"));
+    yv1=parseInt(window.getComputedStyle(obj1,null).getPropertyValue("top"));   
+    xv2=parseInt(window.getComputedStyle(obj2,null).getPropertyValue("left"));
+    yv2=parseInt(window.getComputedStyle(obj2,null).getPropertyValue("top"));
+    w1=parseInt(window.getComputedStyle(obj1,null).getPropertyValue("width"));
+    h1=parseInt(window.getComputedStyle(obj1,null).getPropertyValue("height"));
+    w2=parseInt(window.getComputedStyle(obj2,null).getPropertyValue("width"));
+    h2=parseInt(window.getComputedStyle(obj2,null).getPropertyValue("height"));
+    xlen=Math.abs((xv1+w1/2)-(xv2+w2/2));   //xï˚å¸ÇÃíÜêSä‘ãóó£
+    ylen=Math.abs((yv1+h1/2)-(yv2+h2/2));    //yï˚å¸ÇÃíÜêSä‘ãóó£
+    if(xlen<(w1+w2)/2)       //xï˚å¸ÇÃîªíË
+    {
+       if(ylen < (h1+h2)/2 )  //yï˚å¸ÇÃîªíË
+       {
+          return 1;   //èdÇ»ÇËÇ†ÇË
+       }
+    }
+   return 0;  //èdÇ»ÇËñ≥Çµ
+}
+</SCRIPT>
+</HEAD>
+<BODY onload="init()">
+<div class="main">
+   <img class="uchuu" src="uchuu.png">
+   <img class="ishi" src="isshi.png">
+   <img class="ishi" src="isshi.png">
+   <img class="ishi" src="isshi.png">
+   <img class="ishi" src="isshi.png">
+   <img class="ishi" src="isshi.png">
+   <img class="dan1" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="enemy" src="teki1.png">
+   <img class="eb" src="dan1.png">
+   <img class="player p1" src="jiki1.png">
+   <img class="player p2" src="jiki1.png">
+   <img class="teki2" src="teki2.png"></div>
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <img class="dan2" src="dan2.png">
+   <div class="shuryo" id="owari"></div>
+   <div class="clear" id="kuria"></div>
+   <div class="jikihp" id="ji">écã@:5</div>
+</div>
+<div class="settei">ñÓàÛÉLÅ[Ç≈à⁄ìÆÅAaÉ{É^ÉìÇ≈éÀèo</div>
+</BODY>
+</HTML>
